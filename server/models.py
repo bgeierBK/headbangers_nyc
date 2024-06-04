@@ -16,10 +16,10 @@ class User(db.Model, SerializerMixin):
     bio = db.Column(db.String)
     
 
-    reviews = db.relationship('Review', back_populates= 'user')
-    events = db.relationship('Event', back_populates='user')
-    photos = db.relationship('Photo', back_populates='user')
-    owned_venue=db.relationship('Venue', back_populates='owner_user')
+    reviews = db.relationship('Review', back_populates= 'user', lazy='select')
+    events = db.relationship('Event', back_populates='user', lazy='select')
+    photos = db.relationship('Photo', back_populates='user', lazy='select')
+    owned_venue=db.relationship('Venue', back_populates='owner_user', lazy='select')
 
     serialize_rules=['-_hashed_password', '-reviews.user', '-events.user', '-photos.user', '-owned_venue.owner_user']
 
@@ -68,12 +68,12 @@ class Venue(db.Model, SerializerMixin):
     safety_score = db.Column(db.Integer, default=0)
     owner_user_id = db.Column(db.Integer, db.ForeignKey('users_table.id'))
 
-    reviews = db.relationship('Review', back_populates='venue')
-    events = db.relationship('Event', back_populates = 'venue')
-    photos = db.relationship('Photo', back_populates='venue')
-    owner_user=db.relationship('User', back_populates='owned_venue')
+    reviews = db.relationship('Review', back_populates='venue', lazy='select')
+    events = db.relationship('Event', back_populates = 'venue', lazy='select')
+    photos = db.relationship('Photo', back_populates='venue', lazy='select')
+    owner_user=db.relationship('User', back_populates='owned_venue', lazy='select')
 
-    serialize_rules=['reviews.venue', '-events.venue', '-photos.venue', '-owner_user.owned_venue']
+    serialize_rules=['-reviews.venue', '-events.venue', '-photos.venue', '-owner_user.owned_venue']
 
 class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews_table'
@@ -84,8 +84,8 @@ class Review(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users_table.id'))
     venue_id = db.Column(db.Integer, db.ForeignKey('venues_table.id'))
 
-    user = db.relationship('User', back_populates = 'reviews')
-    venue = db.relationship('Venue', back_populates = 'reviews')
+    user = db.relationship('User', back_populates = 'reviews', lazy='select')
+    venue = db.relationship('Venue', back_populates = 'reviews', lazy='select')
 
     serialize_rules=['-user.reviews', '-venue.reviews']
    
@@ -100,9 +100,9 @@ class Event(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users_table.id'))
     venue_id = db.Column(db.Integer, db.ForeignKey('venues_table.id'))
 
-    user = db.relationship('User', back_populates='events')
-    venue = db.relationship('Venue', back_populates='events')
-    photos = db.relationship('Photo', back_populates='event')
+    user = db.relationship('User', back_populates='events', lazy='select')
+    venue = db.relationship('Venue', back_populates='events', lazy='select')
+    photos = db.relationship('Photo', back_populates='event', lazy='select')
 
     serialize_rules=['-user.events', '-venue.events', '-photos.event' ]
 
@@ -115,13 +115,13 @@ class Photo(db.Model, SerializerMixin):
     venue_id = db.Column(db.Integer, db.ForeignKey('venues_table.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('events_table.id'))
 
-    user = db.relationship('User', back_populates="photos")
-    venue = db.relationship('Venue', back_populates="photos")
-    event = db.relationship('Event', back_populates="photos")
+    user = db.relationship('User', back_populates="photos", lazy='select')
+    venue = db.relationship('Venue', back_populates="photos", lazy='select')
+    event = db.relationship('Event', back_populates="photos", lazy='select')
 
-    serialize_rules=['-user.photos', '-venue.photos', '-event.photos']
+    serialize_rules = ['-user.photos', '-venue.photos', '-event.photos']
 
-    
+
 
 
 
