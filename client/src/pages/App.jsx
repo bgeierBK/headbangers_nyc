@@ -24,7 +24,7 @@ console.log(users)
 return(
 
     <div className="App">
-        <NavBar />
+        <NavBar currentUser = {currentUser}/>
         <h1>Headbangers NYC</h1>
 
         <Outlet context={{currentUser:currentUser, setCurrentUser:setCurrentUser}} />

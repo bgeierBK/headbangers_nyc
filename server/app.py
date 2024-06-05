@@ -4,23 +4,11 @@ from flask import Flask, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
-from flask_bcrypt import Bcrypt
-from models import db, User, Venue, Review, Event, Photo
+from models import User, Venue, Review, Event, Photo
+from config import app, db, bcrypt
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.json.compact = False
 
-CORS(app)
 
-migrate = Migrate(app, db)
-bcrypt = Bcrypt(app)
-
-db.init_app(app)
-bcrypt = Bcrypt(app)
-
-## session routes
 
 @app.get('/')
 def index():
@@ -30,12 +18,12 @@ def index():
 def create_user():
     try:
         new_user= User(
-            username=request.json.get['username'],
-            age=request.json.get['age'],
-            email_address=request.json.get['email_address'],
-            bio=request.json.get['bio']
+            username=request.json.get('username'),
+            age=request.json.get('age'),
+            email_address=request.json.get('email_address'),
+            bio=request.json.get('bio')
         )
-        new_user.hashed_password=request.json['password']
+        new_user.hashed_password=request.json.get('password')
         db.session.add(new_user)
         db.session.commit()
         session['user_id'] = new_user.id
@@ -98,23 +86,6 @@ def delete_user(id):
         return {}, 204
     return {}, 404
 
-@app.post('/api/users')
-def add_user():
-    try:
-        new_user= User(
-            username=request.json.get('username'),
-            age=request.json.get('age'),
-            email_address=request.json.get('email_address'),
-            bio=request.json.get('bio')
-        )
-
-        new_user.hashed_password=request.json['password']
-        db.session.add(new_user)
-        db.session.commit()
-        session['user_id'] = new_user.id
-        return new_user.to_dict(), 201
-    except Exception as e:
-        return {'error': str(e)}, 406
 
 ##venue routes
 

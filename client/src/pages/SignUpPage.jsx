@@ -1,10 +1,10 @@
-
+import SignUp from "../components/SignUp"
 
 
 function Home(){
     return(
         <>
-        <h2>Home Page</h2>
+        <SignUp />
         </>
     )
 }

@@ -35,14 +35,14 @@ class User(db.Model, SerializerMixin):
     
     @validates('username')
     def validate_username(self, key, value):
-        if len(value.strip().replace(' ', '_')) >= 5:
+        if value and len(value.strip().replace(' ', '_')) >= 5:
             return value.strip().replace(' ', '_')
         else:
             raise ValueError('Username must be at least five characters')
     
     @validates('age')
     def validate_age(self, key, value):
-        if value == None or value >=13:
+        if value == None or int(value) >= 13:
             return value
         else:
             raise ValueError("Must be at least 13 years old")

@@ -5,6 +5,7 @@ import App from "./pages/App"
 import Scrapbook from "./pages/Scrapbook"
 import UserProfile from "./pages/UserProfile"
 import VenuePage from "./pages/VenuePage"
+import SignUpPage from "./pages/SignUpPage"
 
 const routes = [
 {
@@ -34,6 +35,16 @@ const routes = [
         {
             path: "/venue/:id",
             element: <VenuePage />,
+            errorElement: <Error />
+        },
+        {
+            path: "/signup",
+            element: <SignUpPage />,
+            errorElement: <Error />
+        },
+        {
+            path: "/login",
+            element: <SignUpPage />,
             errorElement: <Error />
         }
     ]

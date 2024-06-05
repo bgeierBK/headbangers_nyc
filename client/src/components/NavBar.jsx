@@ -2,9 +2,25 @@ import {userState} from 'react'
 import {NavLink} from "react-router-dom"
 import '../index.css'
 
-function NavBar(){
+function NavBar({currentUser}){
 return(
     <nav id="navbar">
+        
+        
+        {
+            currentUser == null
+            ?
+            <div>
+            <NavLink to='/signup'
+            className='navlink'>
+                Signup 
+            </NavLink>
+            <NavLink to='/login'
+            className='navlink'>
+                Login
+            </NavLink>
+            </div>
+            :
         <div id='links'>
             <NavLink to='/'
             className='navlink'>
@@ -18,11 +34,30 @@ return(
             className='navlink'>
                 My Scrapbook 
             </NavLink>
-        </div>
+            </div>
 
+           
+            }
+      
+    
     </nav>
 )
 }
 
 
 export default NavBar
+
+/*
+<NavLink to='/'
+            className='navlink'>
+                Home 
+            </NavLink>
+            <NavLink to='/profile'
+            className='navlink'>
+                My Profile 
+            </NavLink>
+            <NavLink to='/scrapbook'
+            className='navlink'>
+                My Scrapbook 
+            </NavLink>
+            */
