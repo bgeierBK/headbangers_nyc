@@ -1,9 +1,9 @@
 import {userState} from 'react'
 import {NavLink} from "react-router-dom"
-import '../pages/index.css'
+import '../index.css'
 
 function NavBar(){
-
+return(
     <nav id="navbar">
         <div id='links'>
             <NavLink to='/'
@@ -21,4 +21,8 @@ function NavBar(){
         </div>
 
     </nav>
+)
 }
+
+
+export default NavBar

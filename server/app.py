@@ -4,7 +4,7 @@ from flask import Flask, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
-
+from flask_bcrypt import Bcrypt
 from models import db, User, Venue, Review, Event, Photo
 
 app = Flask(__name__)
@@ -15,8 +15,10 @@ app.json.compact = False
 CORS(app)
 
 migrate = Migrate(app, db)
+bcrypt = Bcrypt(app)
 
 db.init_app(app)
+bcrypt = Bcrypt(app)
 
 ## session routes
 
@@ -24,16 +26,15 @@ db.init_app(app)
 def index():
     return "Hello world"
 
-@app.post('/api/signup')
-def signup():
+@app.post('/api/users')
+def create_user():
     try:
         new_user= User(
-            username=request.json.get('username'),
-            age=request.json.get('age'),
-            email_address=request.json.get('email_address'),
-            bio=request.json.get('bio')
+            username=request.json.get['username'],
+            age=request.json.get['age'],
+            email_address=request.json.get['email_address'],
+            bio=request.json.get['bio']
         )
-
         new_user.hashed_password=request.json['password']
         db.session.add(new_user)
         db.session.commit()
@@ -44,29 +45,24 @@ def signup():
     
 @app.get("/api/check_session")
 def check_session():
-    user_id = session.get('user_id')
-    if user_id:
-        user = User.query.filter(User.id == user_id).first()
-        if user:
-            return user.to_dict(), 200
-        return {'error': 'username not found'}, 404
-    return {}, 401
+    user= User.query.where(User.id == session['user_id']).first()
+    if user:
+        return user.to_dict(), 200
+    else:
+        return {}, 204
 
 @app.post('/api/login')
 def login():
-    user = User.query.filter(User.username == request.json['username']).first()
-    if user == None:
-        return {'error': 'username not found'}
-    elif user.authenticate(request.json['password']):
+    user = User.query.where(User.username == request.json.get('username')).first()
+    if user and bcrypt.check_password_hash(user._hashed_password, request.json.get('password')):
         session['user_id'] = user.id
-        return user.to_dict(), 200
-    return {'error': 'wrong password'}, 401
+        return user.to_dict(), 201
+    else:
+        return {'error': 'Username or password was invalid'}
 
 @app.delete('/api/logout')
 def logout():
-    if session.get['user_id'] == None:
-        return {}, 401
-    session['user_id'] = None
+    session.pop('user_id')
     return {}, 204
 
 ## user routes
