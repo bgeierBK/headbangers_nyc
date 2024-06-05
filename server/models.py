@@ -21,7 +21,7 @@ class User(db.Model, SerializerMixin):
     photos = db.relationship('Photo', back_populates='user', lazy='select')
     owned_venue=db.relationship('Venue', back_populates='owner_user', lazy='select')
 
-    serialize_rules=['-_hashed_password', '-reviews.user', '-events.user', '-photos.user', '-owned_venue.owner_user']
+    serialize_rules=['-_hashed_password', '-reviews.user', '-events', '-photos', '-owned_venue']
 
     @hybrid_property
     def hashed_password(self):
@@ -87,7 +87,7 @@ class Review(db.Model, SerializerMixin):
     user = db.relationship('User', back_populates = 'reviews', lazy='select')
     venue = db.relationship('Venue', back_populates = 'reviews', lazy='select')
 
-    serialize_rules=['-user.reviews', '-venue.reviews']
+    serialize_rules=['-user.reviews', '-venue']
    
 
 class Event(db.Model, SerializerMixin):
