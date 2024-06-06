@@ -29,7 +29,7 @@ const routes = [
             errorElement: <Error />
         },
         {
-            path: "/profile/:id",
+            path: "/users/:id",
             element: <UserProfile />,
             errorElement: <Error />
         },

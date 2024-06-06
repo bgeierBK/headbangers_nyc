@@ -32,6 +32,14 @@ function NavBar({currentUser, setCurrentUser}){
             currentUser == null
             ?
             <div>
+            <NavLink to='/'
+            className='navlink'>
+                Home 
+            </NavLink>
+            <NavLink to='/about'
+            className='navlink'>
+                About 
+            </NavLink>
             <NavLink to='/signup'
             className='navlink'>
                 Signup 
@@ -54,6 +62,10 @@ function NavBar({currentUser, setCurrentUser}){
             <NavLink to='/scrapbook'
             className='navlink'>
                 My Scrapbook 
+            </NavLink>
+            <NavLink to='/about'
+            className='navlink'>
+                About 
             </NavLink>
             <button onClick={handleLogOut}>Log Out</button>
             </div>

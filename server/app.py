@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, request, session
+from flask import Flask, request, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
@@ -9,9 +9,6 @@ from config import app, db, bcrypt
 
 
 
-@app.get('/')
-def index():
-    return "Hello world"
 
 @app.post('/api/users')
 def create_user():
@@ -60,9 +57,9 @@ def get_users():
 
 @app.get('/api/users/<int:id>')
 def get_one_user(id):
-    user = User.query.where(User.id == id).first()
+    user = User.query.get(id)
     if user:
-        return user.to_dict(rules={'-reviews'}), 200
+        return jsonify(user.to_dict(rules={'-reviews'})), 200
     return {}, 404
 
 @app.patch('/api/users/<int:id>')

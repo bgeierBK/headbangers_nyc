@@ -6,7 +6,6 @@ import NavBar from "../components/NavBar"
 function App(){
 
 const [currentUser, setCurrentUser] = useState(null)
-const [venues, setVenues] = useState([])
 const [users, setUsers] = useState([])
 const [events, setEvents] = useState([])
 
@@ -16,7 +15,7 @@ useEffect(() =>{
     .then(users => setUsers(users))
 }, [])
 
-/*
+
 useEffect(() =>{
     fetch('/api/check_session')
     .then(response =>{
@@ -26,7 +25,7 @@ useEffect(() =>{
         }
     })
 }, [])
-*/
+
 
 
 console.log(users)
@@ -38,7 +37,7 @@ return(
         <NavBar currentUser = {currentUser} setCurrentUser={setCurrentUser}/>
         <h1>Headbangers NYC</h1>
 
-        <Outlet context={{currentUser:currentUser, setCurrentUser:setCurrentUser}} />
+        <Outlet context={{currentUser:currentUser, setCurrentUser:setCurrentUser, }} />
     </div>
 )
 

@@ -16,7 +16,7 @@ function handleSubmit(event){
     fetch('/api/login', {
         method: 'POST',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-        body: JSON.stringify(username, password)
+        body: JSON.stringify({username, password})
     })
     .then(response =>{
         if (response.ok){
