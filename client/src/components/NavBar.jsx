@@ -2,10 +2,31 @@ import {userState} from 'react'
 import {NavLink} from "react-router-dom"
 import '../index.css'
 
-function NavBar({currentUser}){
-return(
+function NavBar({currentUser, setCurrentUser}){
+    function handleLogOut(){
+        fetch('/api/logout', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok){
+                setCurrentUser(null);
+                alert("Logged out successfully!")
+            } else {
+                alert("failed to log out")
+            }
+        })
+        .catch(error =>{
+            console.error("Problem with logout:", error.message);
+            alert("Problem with logout:" + error.message)
+        })
+    }
+
+    return(
     <nav id="navbar">
-        
         
         {
             currentUser == null
@@ -34,6 +55,7 @@ return(
             className='navlink'>
                 My Scrapbook 
             </NavLink>
+            <button onClick={handleLogOut}>Log Out</button>
             </div>
 
            

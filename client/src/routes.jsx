@@ -6,6 +6,7 @@ import Scrapbook from "./pages/Scrapbook"
 import UserProfile from "./pages/UserProfile"
 import VenuePage from "./pages/VenuePage"
 import SignUpPage from "./pages/SignUpPage"
+import LogInPage from "./pages/LogInPage"
 
 const routes = [
 {
@@ -44,7 +45,7 @@ const routes = [
         },
         {
             path: "/login",
-            element: <SignUpPage />,
+            element: <LogInPage />,
             errorElement: <Error />
         }
     ]

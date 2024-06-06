@@ -9,7 +9,6 @@ from config import app, db, bcrypt
 
 
 
-
 @app.get('/')
 def index():
     return "Hello world"

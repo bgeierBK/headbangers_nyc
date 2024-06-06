@@ -1,7 +1,7 @@
 import SignUp from "../components/SignUp"
 
 
-function Home(){
+function SignUpPage(){
     return(
         <>
         <SignUp />
@@ -9,4 +9,4 @@ function Home(){
     )
 }
 
-export default Home
+export default SignUpPage

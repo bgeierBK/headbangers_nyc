@@ -16,6 +16,17 @@ useEffect(() =>{
     .then(users => setUsers(users))
 }, [])
 
+/*
+useEffect(() =>{
+    fetch('/api/check_session')
+    .then(response =>{
+        if (response.status === 200){
+            response.json()
+            .then(loggedInUser => setCurrentUser(loggedInUser))
+        }
+    })
+}, [])
+*/
 
 
 console.log(users)
@@ -24,7 +35,7 @@ console.log(users)
 return(
 
     <div className="App">
-        <NavBar currentUser = {currentUser}/>
+        <NavBar currentUser = {currentUser} setCurrentUser={setCurrentUser}/>
         <h1>Headbangers NYC</h1>
 
         <Outlet context={{currentUser:currentUser, setCurrentUser:setCurrentUser}} />
