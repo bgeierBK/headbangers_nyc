@@ -26,6 +26,8 @@ function UserProfile(){
         })
     }, [id])
 
+    console.log(user)
+
 if (loading){
     return <div>Loading...</div>
 }
@@ -41,6 +43,7 @@ if (error){
         <>
         <h2>UserProfile Page</h2>
         <h1>{user.username}</h1>
+        <h2>{user.bio}</h2>
     
     </>
     )

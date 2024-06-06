@@ -59,7 +59,7 @@ def get_users():
 def get_one_user(id):
     user = User.query.get(id)
     if user:
-        return jsonify(user.to_dict(rules={'-reviews'})), 200
+        return jsonify(user.to_dict(rules={'reviews'})), 200
     return {}, 404
 
 @app.patch('/api/users/<int:id>')
@@ -93,7 +93,7 @@ def get_venues():
 def get_one_venue(id):
     venue = Venue.query.where(Venue.id == id).first()
     if venue:
-        return venue.to_dict(rules={"-events", "-owner_user", "-reviews"}), 200
+        return venue.to_dict(rules={"-events", "-owner_user"}), 200
     return {}, 404
 
 @app.patch('/api/venues/<int:id>')
