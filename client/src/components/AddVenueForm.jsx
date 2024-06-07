@@ -32,8 +32,14 @@ function handleSubmit(event){
         body: JSON.stringify(itemData)
     })
     .then(response => response.json())
-    ,then(newVenue =>{
+    .then(newVenue =>{
         setVenues([...venues, newVenue])
+        setFormData({
+            name: "",
+            address: "",
+            burough: "",
+            website: ""
+        })
     })
 }
 
@@ -41,7 +47,7 @@ return(
 
 <div id="add">
 
-    <form id='addvalue'>
+    <form id='addvalue' onSubmit={handleSubmit}>
         <div id="add head">
             <h2>Don't see your favorite venue? Add it!</h2>
         </div>

@@ -6,6 +6,7 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 from models import User, Venue, Review, Event, Photo
 from config import app, db, bcrypt
+from datetime import datetime
 
 
 
@@ -59,7 +60,7 @@ def get_users():
 def get_one_user(id):
     user = User.query.get(id)
     if user:
-        return jsonify(user.to_dict(rules={'reviews'})), 200
+        return jsonify(user.to_dict(rules={'reviews', 'events'})), 200
     return {}, 404
 
 @app.patch('/api/users/<int:id>')
@@ -169,7 +170,9 @@ def add_review():
     try:
         new_review= Review(
             stars=request.json.get('stars'),
-            review_content=request.json.get('review_content')
+            review_content=request.json.get('review_content'),
+            user_id = request.json.get('user_id'), 
+            venue_id=request.json.get('venue_id')
         )
         db.session.add(new_review)
         db.session.commit()
@@ -213,10 +216,16 @@ def delete_event(id):
 @app.post('/api/events')
 def add_event():
     try:
+        date_string = request.json.get('date')
+        date_object = datetime.strptime(date_string, '%Y-%m-%d')
+
         new_event= Event(
             headliner=request.json.get('headliner'),
             opening_acts=request.json.get('opening_acts'),
-            date=('date')
+            date= date_object,
+            user_id=request.json.get('user_id'),
+            venue_id=request.json.get('venue_id')
+
         )
         db.session.add(new_event)
         db.session.commit()
@@ -248,7 +257,7 @@ def update_photo(id):
         return photo.to_dict()
     return {}, 404
 
-@app.delete('/api/events/<int:id>')
+@app.delete('/api/photos/<int:id>')
 def delete_photo(id):
     photo = Photo.query.where(Photo.id == id).first()
     if photo:
@@ -257,7 +266,7 @@ def delete_photo(id):
         return {}, 204
     return {}, 404  
 
-@app.post('/api/events')
+@app.post('/api/photos')
 def add_photo():
     try:
         new_photo= Photo(

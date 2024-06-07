@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom'
 import { useOutletContext } from 'react-router-dom'
+import EventCard from '../components/EventCard'
 
 function UserProfile(){
     const {id} = useParams()
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [user, setUser] = useState(null)
+    const [events, setEvents] = useState([])
     
     useEffect(() =>{
         fetch(`/api/users/${id}`)
@@ -18,6 +20,7 @@ function UserProfile(){
         })
         .then((data) =>{
             setUser(data);
+            setEvents(data.events);
             setLoading(false);
         })
         .catch((error) =>{
@@ -26,7 +29,7 @@ function UserProfile(){
         })
     }, [id])
 
-    console.log(user)
+    
 
 if (loading){
     return <div>Loading...</div>
@@ -37,6 +40,9 @@ if (error){
 }
 
 
+const mappedEvents = events.map(event =>{
+    return <EventCard key={event.id} event={event} />
+})
 
 
     return(
@@ -44,6 +50,7 @@ if (error){
         <h2>UserProfile Page</h2>
         <h1>{user.username}</h1>
         <h2>{user.bio}</h2>
+        {mappedEvents}
     
     </>
     )

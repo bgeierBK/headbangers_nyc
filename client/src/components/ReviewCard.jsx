@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react'
 
 function ReviewCard({review}){
-    console.log(review)
 
+    const userName = review.user?.username || 'Anonymous'
+    
     return(
         <div>
-            <strong><p>{review.user.username}</p></strong>{review.review_content}
+            <strong><p>{userName}</p></strong>{review.review_content}
         </div>
     )
 

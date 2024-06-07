@@ -59,10 +59,6 @@ function NavBar({currentUser, setCurrentUser}){
             className='navlink'>
                 My Profile 
             </NavLink>
-            <NavLink to='/scrapbook'
-            className='navlink'>
-                My Scrapbook 
-            </NavLink>
             <NavLink to='/about'
             className='navlink'>
                 About 
