@@ -2,8 +2,8 @@ import {useState, useEffect} from 'react'
 import { useOutletContext } from 'react-router-dom'
 import VenueCard from '../components/VenueCard.jsx'
 
-function VenueContainer(){
-    const [venues, setVenues] = useState([])
+function VenueContainer({venues, setVenues}){
+    
     const [searchTerm, setSearchTerm] = useState('')
     const [filteredVenues, setFilteredVenues] = useState([])
 
