@@ -113,6 +113,10 @@ function handleEventSubmit(event){
             />
             <button type="submit">Submit Review</button>
         </form>
+        
+        <br></br>
+        <br></br>
+        <br></br>
 
         <form onSubmit={handleEventSubmit}>
         <label className='label' htmlFor="name">Headliner</label>
@@ -138,6 +142,8 @@ function handleEventSubmit(event){
             />
             <button type="submit">Create Event</button>
         </form>
+
+        <br></br>
 
         </>
     )

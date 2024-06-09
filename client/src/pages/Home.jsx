@@ -9,6 +9,9 @@ function Home(){
         <>
         <h2>Home Page</h2>
         <AddVenue venues= {venues} setVenues={setVenues}/>
+        <br></br>
+        <br></br>
+        <br></br>
         <VenueContainer venues= {venues} setVenues={setVenues} />
         </>
     )

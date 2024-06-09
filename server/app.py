@@ -5,8 +5,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
 from models import User, Venue, Review, Event, Photo
-from config import app, db, bcrypt
+from config import app, db, bcrypt, os
 from datetime import datetime
+from werkzeug.utils import secure_filename
+
+
 
 
 
@@ -269,14 +272,28 @@ def delete_photo(id):
 @app.post('/api/photos')
 def add_photo():
     try:
-        new_photo= Photo(
-            file=request.json.get('file')
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file part'}), 400
+        file = request.filename['file']
+        if file.filename == '':
+            return jsonify({'error': 'No file part'}), 400
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        new_photo = Photo(
+            file=filename,
+            user_id=request.form.get('user_id'),
+            venue_id=request.form.get('venue_id'),
+            event_id=request.form.get('event_id')
         )
         db.session.add(new_photo)
         db.session.commit()
-        return new_photo.to_dict(), 201
+
+        return jsonify(new_photo.to_dict()), 201
     except Exception as e:
-        return {'error': str(e)}, 406
+        return jsonify({'error': str(e)}), 406
+        
+
 
 
 

@@ -110,7 +110,7 @@ class Photo(db.Model, SerializerMixin):
     __tablename__ = 'photos_table'
 
     id = db.Column(db.Integer, primary_key=True)
-    file = db.Column(db.String)
+    file = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users_table.id'))
     venue_id = db.Column(db.Integer, db.ForeignKey('venues_table.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('events_table.id'))

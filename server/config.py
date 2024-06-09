@@ -4,13 +4,18 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flask_cors import CORS
+import os
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'something'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = '/Users/ben/Development/code/phase-5/headbangers_nyc/uploads'
 app.json.compact = False
+
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
 
 bcrypt = Bcrypt(app)
 
