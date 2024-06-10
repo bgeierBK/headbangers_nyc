@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom'
 import { useOutletContext } from 'react-router-dom'
 import ReviewCard from '../components/ReviewCard'
+import Rankings from '../components/Rankings'
 
 function VenuePage(){
     const {id} = useParams()
@@ -11,7 +12,6 @@ function VenuePage(){
     const [reviewText, setReviewText] = useState('')
     const [reviews, setReviews] = useState('')
     const { currentUser, setCurrentUser } = useOutletContext();
-    const [venueID, setVenueID] = (id)
     const [headliner, setHeadliner] = useState('')
     const [openers, setOpeners] = useState('')
     const [date, setDate] = useState('')
@@ -96,9 +96,12 @@ function handleEventSubmit(event){
        <>
         <h2>Venue Page</h2>
         <h3>{venue.name}</h3>
+        <br></br>
+        <br></br>
+        <Rankings key ={venue.id} venue={venue}/>
         <div className='reviews'>
             {reviews.map(review =>(
-                <ReviewCard key={review.id} review={review} />
+                <ReviewCard key={review.id} review={review} id={id} />
             ))}
         </div>
 
@@ -113,7 +116,7 @@ function handleEventSubmit(event){
             />
             <button type="submit">Submit Review</button>
         </form>
-        
+
         <br></br>
         <br></br>
         <br></br>
