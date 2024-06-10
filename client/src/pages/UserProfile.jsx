@@ -21,6 +21,7 @@ function UserProfile(){
         .then((data) =>{
             setUser(data);
             setEvents(data.events);
+            console.log(data.events)
             setLoading(false);
         })
         .catch((error) =>{
@@ -28,6 +29,8 @@ function UserProfile(){
             setLoading(false)
         })
     }, [id])
+
+    
 
     
 

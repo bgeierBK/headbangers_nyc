@@ -274,9 +274,9 @@ def add_photo():
     try:
         if 'file' not in request.files:
             return jsonify({'error': 'No file part'}), 400
-        file = request.filename['file']
+        file = request.files['file']
         if file.filename == '':
-            return jsonify({'error': 'No file part'}), 400
+            return jsonify({'error': 'No selected file'}), 400
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
@@ -289,7 +289,7 @@ def add_photo():
         db.session.add(new_photo)
         db.session.commit()
 
-        return jsonify(new_photo.to_dict()), 201
+        return jsonify({'message': 'photo uploaded successfully'}), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 406
         
