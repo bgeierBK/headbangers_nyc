@@ -91,7 +91,7 @@ def delete_user(id):
 
 @app.get('/api/venues')
 def get_venues():
-    return [venue.to_dict(rules={"-events", "-owner_user", "-reviews"}) for venue in Venue.query.all()], 200
+    return [venue.to_dict(rules={"events", "-owner_user", "reviews"}) for venue in Venue.query.all()], 200
 
 @app.get('/api/venues/<int:id>')
 def get_one_venue(id):

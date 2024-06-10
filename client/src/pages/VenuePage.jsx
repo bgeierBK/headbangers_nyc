@@ -27,7 +27,9 @@ function VenuePage(){
         })
         .then((data) =>{
             setVenue(data);
+            console.log(data)
             setReviews(data.reviews)
+            console.log(reviews)
             setLoading(false);
         })
         .catch((error) =>{
