@@ -9,6 +9,7 @@ import { AdvancedImage } from '@cloudinary/react';
 function EventCard({event}){
 
     const [file, setFile] = useState(null)
+    const [photos, setPhotos] = useState(event.photos || [])
     const [message, setMessage]= useState('')
     const eventDate = new Date(event.date);
     const formattedDate = eventDate.toLocaleDateString('en-US',{
@@ -56,6 +57,7 @@ function EventCard({event}){
     const result = await backendResponse.json();
     setMessage('Photo uploaded successfully');
     console.log('Photo uploaded successfully', result);
+    setPhotos([...photos, result])
     } catch (error){
         setMessage('Error uploading photo');
         console.error('Error ploading photo', error)
@@ -66,7 +68,7 @@ function EventCard({event}){
 
    
 
-   const mappedPhotos = event.photos.map(photo =>{
+   const mappedPhotos = photos.map(photo =>{
     return <PhotoCard key = {photo.id} photo={photo} />
    })
 console.log(event.photos)

@@ -5,7 +5,7 @@ function PhotoCard({photo}){
     
     return(
        <div>
-<img src={photo.url}></img>
+<img className="size-40" src={photo.url}></img>
 
        </div>
     )

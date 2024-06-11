@@ -7,7 +7,7 @@ function Home(){
     const [venues, setVenues] = useState([])
     return(
         <>
-        <h2>Home Page</h2>
+        <h2 className="text-red-500">Home Page</h2>
         <AddVenue venues= {venues} setVenues={setVenues}/>
         <br></br>
         <br></br>
