@@ -8,7 +8,17 @@ from models import User, Venue, Review, Event, Photo
 from config import app, db, bcrypt, os
 from datetime import datetime
 from werkzeug.utils import secure_filename
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
+cloudinary.config(
+    cloud_name='dxtkrqdmo',
+    api_key = '562345124685953',
+    api_secret = '4pgVbgO8NdaOWgR7Zdz9GQ4Qaso'
+
+
+)
 
 
 
@@ -271,27 +281,25 @@ def delete_photo(id):
 
 @app.post('/api/photos')
 def add_photo():
-    try:
-        if 'file' not in request.files:
-            return jsonify({'error': 'No file part'}), 400
-        file = request.files['file']
-        if file.filename == '':
-            return jsonify({'error': 'No selected file'}), 400
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    data = request.get_json()
+    url = data.get('file')
+    user_id = data.get('user_id')
+    venue_id = data.get('user_id')
+    event_id = data.get('event_id')
 
-        new_photo = Photo(
-            file=filename,
-            user_id=request.form.get('user_id'),
-            venue_id=request.form.get('venue_id'),
-            event_id=request.form.get('event_id')
-        )
-        db.session.add(new_photo)
-        db.session.commit()
+    if not url:
+        return jsonify({'error': 'no photo url provided'}), 400
+    
+    new_photo= Photo(
+        url=url,
+        user_id=user_id,
+        venue_id=venue_id,
+        event_id=event_id
+    )
+    db.session.add(new_photo)
+    db.session.commit()
 
-        return jsonify({'message': 'photo uploaded successfully'}), 201
-    except Exception as e:
-        return jsonify({'error': str(e)}), 406
+    return jsonify({'photo added!'})
         
 
 

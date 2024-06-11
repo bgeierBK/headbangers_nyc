@@ -1,4 +1,10 @@
 import React, {useState} from 'react'
+import PhotoCard from './PhotoCard.jsx'
+import axios from 'axios'
+import { Cloudinary } from '@cloudinary/url-gen';
+import { auto } from '@cloudinary/url-gen/actions/resize';
+import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
+import { AdvancedImage } from '@cloudinary/react';
 
 function EventCard({event}){
 
@@ -17,31 +23,53 @@ function EventCard({event}){
 
    const handlePhotoSubmit = async (e) =>{
     e.preventDefault();
-
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('user_id', event.user.id);
-    formData.append('venue_id', event.venue.id);
-    formData.append('event_id', event.id);
-
-    try{
-        const response = await fetch('/api/photos', {
-            method: 'POST',
-            body: formData
-        });
-        if (!response.ok){
-            throw new Error('Failed to upload photo')
-        }
-
-        const result = await response.json();
-        setMessage('photo uploaded successfully');
-        console.log('photo uploaded successfully', result);
-    } catch(error){
-        setMessage('Error uploading photo');
-        console.error('Error uploading photo', error)
-    }
+    formData.append('upload_preset', 'm4excn2y');
     
-   }
+    try{
+        const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dxtkrqdmo/image/upload',{
+        method: 'POST',
+        body: formData
+        });
+        if (!cloudinaryResponse.ok){
+            throw new Error('Failed to upload photo to Cloudinary')
+        }
+    const cloudinaryResult = await CloudinaryResponse.json();
+    const photoUrl = cloudinaryResult.secure_url;
+
+    const backendResponse = await fetch ('/api/photos', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            file: photoUrl,
+            user_id: event.user.id,
+            venue_id: event.venue.id,
+            event_id: event.id
+        })
+    });
+    if (!backendResponse.ok){
+        throw new Error('Failed to upload photo to backend');
+    }
+    const result = await backendResponse.json();
+    setMessage('Photo uploaded successfully');
+    console.log('Photo uploaded successfully', result);
+    } catch (error){
+        setMessage('Error uploading photo');
+        console.error('Error ploading photo', error)
+    }
+}
+
+
+
+   
+
+   const mappedPhotos = event.photos.map(photo =>{
+    return <PhotoCard key = {photo.id} photo={photo} />
+   })
+console.log(event.photos)
     
     return(
 
@@ -53,6 +81,7 @@ function EventCard({event}){
         <h5>Event Photos:</h5>
         <br></br>
         <br></br>
+        {mappedPhotos}
         <br></br>
         <h5>Add a photo for this event:</h5>
         <form onSubmit={handlePhotoSubmit}>

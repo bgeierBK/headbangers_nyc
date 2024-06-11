@@ -62,12 +62,11 @@ class Venue(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     address = db.Column(db.String)
-    burough = db.Column(db.String)
+    burough = db.Column(db.String, default="Manhattan")
     website = db.Column(db.String)
     lgbtq_score = db.Column(db.Integer, default=0)
     safety_score = db.Column(db.Integer, default=0)
     owner_user_id = db.Column(db.Integer, db.ForeignKey('users_table.id'))
-
     reviews = db.relationship('Review', back_populates='venue', lazy='select')
     events = db.relationship('Event', back_populates = 'venue', lazy='select')
     photos = db.relationship('Photo', back_populates='venue', lazy='select')
@@ -79,11 +78,10 @@ class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews_table'
 
     id = db.Column(db.Integer, primary_key=True)
-    stars = db.Column(db.Integer)
     review_content = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users_table.id'))
     venue_id = db.Column(db.Integer, db.ForeignKey('venues_table.id'))
-
+    stars = db.Column(db.Integer)
     user = db.relationship('User', back_populates = 'reviews', lazy='select')
     venue = db.relationship('Venue', back_populates = 'reviews', lazy='select')
 
@@ -110,7 +108,7 @@ class Photo(db.Model, SerializerMixin):
     __tablename__ = 'photos_table'
 
     id = db.Column(db.Integer, primary_key=True)
-    file = db.Column(db.String(255), nullable=False)
+    url = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users_table.id'))
     venue_id = db.Column(db.Integer, db.ForeignKey('venues_table.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('events_table.id'))

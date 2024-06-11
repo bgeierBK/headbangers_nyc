@@ -10,6 +10,7 @@ function UserProfile(){
     const [user, setUser] = useState(null)
     const [events, setEvents] = useState([])
     
+    
     useEffect(() =>{
         fetch(`/api/users/${id}`)
         .then(response =>{
@@ -53,6 +54,7 @@ const mappedEvents = events.map(event =>{
         <h2>UserProfile Page</h2>
         <h1>{user.username}</h1>
         <h2>{user.bio}</h2>
+        <br></br>
         {mappedEvents}
     
     </>

@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom'
 import { useOutletContext } from 'react-router-dom'
 import ReviewCard from '../components/ReviewCard'
-import Rankings from '../components/Rankings'
 
 function VenuePage(){
     const {id} = useParams()
@@ -15,6 +14,7 @@ function VenuePage(){
     const [headliner, setHeadliner] = useState('')
     const [openers, setOpeners] = useState('')
     const [date, setDate] = useState('')
+    const [stars, setStars] = useState(null)
     
     
     useEffect(() =>{
@@ -27,16 +27,14 @@ function VenuePage(){
         })
         .then((data) =>{
             setVenue(data);
-            console.log(data)
             setReviews(data.reviews)
-            console.log(reviews)
             setLoading(false);
         })
         .catch((error) =>{
             setError(error);
             setLoading(false)
         })
-    }, [id])
+    }, [id, venue])
 
 
 if (loading){
@@ -93,6 +91,97 @@ function handleEventSubmit(event){
 
     
 }
+function handleLGBTUp(){
+    fetch(`/api/venues/${id}`,{
+    method: "PATCH",
+    headers:{
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+    },
+    body: JSON.stringify({lgbtq_score: venue.lgbtq_score + 1})
+    })
+    .then(response =>{
+        if (!response.ok){
+            throw new Error('Failed to update')
+        }
+        return response.json()
+    })
+    .then (updatedVenue =>{
+        console.log('Update successful', updatedVenue)
+    })
+    .catch(error => {
+        console.error('Error:', error)
+    })
+    }
+
+    function handleLGBTDown(){
+        fetch(`/api/venues/${id}`,{
+        method: "PATCH",
+        headers:{
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+        },
+        body: JSON.stringify({lgbtq_score: venue.lgbtq_score - 1})
+        })
+        .then(response =>{
+            if (!response.ok){
+                throw new Error('Failed to update')
+            }
+            return response.json()
+        })
+        .then (updatedVenue =>{
+            console.log('Update successful', updatedVenue)
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+        }
+
+        function handleSafetyDown(){
+            fetch(`/api/venues/${id}`,{
+            method: "PATCH",
+            headers:{
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+            },
+            body: JSON.stringify({safety_score: venue.safety_score - 1})
+            })
+            .then(response =>{
+                if (!response.ok){
+                    throw new Error('Failed to update')
+                }
+                return response.json()
+            })
+            .then (updatedVenue =>{
+                console.log('Update successful', updatedVenue)
+            })
+            .catch(error => {
+                console.error('Error:', error)
+            })
+            }
+        
+            function handleSafetyUp(){
+                fetch(`/api/venues/${id}`,{
+                method: "PATCH",
+                headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+                },
+                body: JSON.stringify({safety_score: venue.safety_score + 1})
+                })
+                .then(response =>{
+                    if (!response.ok){
+                        throw new Error('Failed to update')
+                    }
+                    return response.json()
+                })
+                .then (updatedVenue =>{
+                    console.log('Update successful', updatedVenue)
+                })
+                .catch(error => {
+                    console.error('Error:', error)
+                })
+                }
     
     return(
        <>
@@ -100,7 +189,12 @@ function handleEventSubmit(event){
         <h3>{venue.name}</h3>
         <br></br>
         <br></br>
-        <Rankings key ={venue.id} venue={venue}/>
+        <div className='ranking'>
+<button onClick={handleLGBTDown} >👎</button> LGBTQ Friendliness Score: {venue.lgbtq_score} <button onClick={handleLGBTUp}>👍</button>
+<br></br>
+<br></br>
+<button onClick={handleSafetyDown}>👎</button> Safety Score: {venue.safety_score} <button onClick={handleSafetyUp}>👍</button>
+</div>
         <div className='reviews'>
             {reviews.map(review =>(
                 <ReviewCard key={review.id} review={review} id={id} />
@@ -118,6 +212,8 @@ function handleEventSubmit(event){
             />
             <button type="submit">Submit Review</button>
         </form>
+
+
 
         <br></br>
         <br></br>

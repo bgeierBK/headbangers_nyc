@@ -55,7 +55,7 @@ function NavBar({currentUser, setCurrentUser}){
             className='navlink'>
                 Home 
             </NavLink>
-            <NavLink to='/profile'
+            <NavLink to={`/users/${currentUser.id}`}
             className='navlink'>
                 My Profile 
             </NavLink>
