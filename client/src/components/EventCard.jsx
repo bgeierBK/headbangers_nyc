@@ -35,7 +35,7 @@ function EventCard({event}){
         if (!cloudinaryResponse.ok){
             throw new Error('Failed to upload photo to Cloudinary')
         }
-    const cloudinaryResult = await CloudinaryResponse.json();
+    const cloudinaryResult = await cloudinaryResponse.json();
     const photoUrl = cloudinaryResult.secure_url;
 
     const backendResponse = await fetch ('/api/photos', {
