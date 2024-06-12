@@ -184,7 +184,8 @@ function handleLGBTUp(){
                 }
     
     return(
-       <>
+       <div className='bg-neutral-200'>
+       <div className='bg-neutral-200'>
         <h2>Venue Page</h2>
         <h3>{venue.name}</h3>
         <br></br>
@@ -195,12 +196,13 @@ function handleLGBTUp(){
 <br></br>
 <button onClick={handleSafetyDown}>👎</button> Safety Score: {venue.safety_score} <button onClick={handleSafetyUp}>👍</button>
 </div>
-        <div className='reviews'>
+        <div className='space-y-2'>
             {reviews.map(review =>(
                 <ReviewCard key={review.id} review={review} id={id} />
             ))}
         </div>
-
+        
+        <div className='flex flex-col space-y-4'>
         <form onSubmit={handleReviewSubmit}>
             <label>Share Your Review</label>
             <textarea 
@@ -212,6 +214,7 @@ function handleLGBTUp(){
             />
             <button type="submit">Submit Review</button>
         </form>
+        </div>
 
 
 
@@ -246,7 +249,8 @@ function handleLGBTUp(){
 
         <br></br>
 
-        </>
+        </div>
+        </div>
     )
 }
 

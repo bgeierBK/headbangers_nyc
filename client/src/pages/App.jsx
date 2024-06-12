@@ -33,10 +33,11 @@ console.log(users)
 
 return(
 
-    <div className="App">
+    <div className="bg-neutral-200">
         <NavBar currentUser = {currentUser} setCurrentUser={setCurrentUser}/>
+        <div className='font-newRocker'>
         <h1>Headbangers NYC</h1>
-
+        </div>
         <Outlet context={{currentUser:currentUser, setCurrentUser:setCurrentUser, }} />
     </div>
 )
