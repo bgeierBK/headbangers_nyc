@@ -1,16 +1,21 @@
 import React, {useState} from 'react'
 import PhotoCard from './PhotoCard.jsx'
+import Modal from './Modal'
 import axios from 'axios'
 import { Cloudinary } from '@cloudinary/url-gen';
 import { auto } from '@cloudinary/url-gen/actions/resize';
 import { autoGravity } from '@cloudinary/url-gen/qualifiers/gravity';
 import { AdvancedImage } from '@cloudinary/react';
+import backgroundImage from '/Users/ben/Development/code/phase-5/headbangers_nyc/client/src/images/ticket.png'
 
 function EventCard({event}){
 
+    const [isOpen, setIsOpen] = useState(false)
+    const [selectedPhoto, setSelectedPhoto] = useState(null)
     const [file, setFile] = useState(null)
     const [photos, setPhotos] = useState(event.photos || [])
     const [message, setMessage]= useState('')
+    
     const eventDate = new Date(event.date);
     const formattedDate = eventDate.toLocaleDateString('en-US',{
         year: 'numeric',
@@ -65,25 +70,46 @@ function EventCard({event}){
 }
 
 
+const openModal = (photo) => {
+    setSelectedPhoto(photo);
+    setIsOpen(true)
+}
 
+const closeModal = () =>{
+    setIsOpen(false);
+    setSelectedPhoto(null)
+}
    
 
-   const mappedPhotos = photos.map(photo =>{
-    return <PhotoCard key = {photo.id} photo={photo} />
-   })
-console.log(event.photos)
+   const mappedPhotos = photos.map(photo => (
+    <div key={photo.id} className='relative overflow-hidden' onClick={() => openModal(photo)}>
+        <PhotoCard photo={photo}/>
+    </div>
+   ))
     
     return(
 
         <>
-        <h2>{event.headliner}</h2>
-        <h3>{event.opening_acts}</h3>
-        <h3>{event.venue.name}</h3>
-        <h4>{formattedDate}</h4>
+        <div
+        className='relative bg-no-repeat bg-center bg-cover h-auto w-full max-w-lg my-8 p-8 mx-auto'
+        style={{
+            backgroundImage: `url(${backgroundImage})`,
+        }}
+        >
+            
+            <div className='relative text-center'>  
+                <h2 className='text-3xl font-bold text-black'>{event.headliner}</h2>
+                <h3 className='text-2xl text-black'>{event.opening_acts}</h3>
+                <h3 className='text-xl text-black'>{event.venue.name}</h3>
+                <h4 className='text-lg text-black'>{formattedDate}</h4>
+            </div>  
+        </div>
         <h5>Event Photos:</h5>
         <br></br>
         <br></br>
+        <div className= 'grid grid-cols-5 gap-4'>
         {mappedPhotos}
+        </div>
         <br></br>
         <h5>Add a photo for this event:</h5>
         <form onSubmit={handlePhotoSubmit}>
@@ -92,6 +118,9 @@ console.log(event.photos)
             </label>
             <button type="submit">Upload Photo</button>
         </form>
+        {isOpen && (
+            <Modal photo={selectedPhoto} closeModal={closeModal} />
+        )}
         </>
     )
 }

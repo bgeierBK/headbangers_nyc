@@ -31,7 +31,7 @@ function VenueContainer({venues, setVenues}){
         return <VenueCard key={venue.id} venues={venues} setVenues={setVenues} venue={venue} />
     })
 return(
-    <>
+    <div className='flex flex-col'>
     <div>
     <label htmlFor="search">Search by name:</label>
     <input
@@ -41,11 +41,12 @@ return(
     onChange={handleSearchChange}
     />
     </div>
+    <br></br>
 
     <div>
         {mappedVenues}
     </div>
-    </>
+    </div>
 )
 }
 

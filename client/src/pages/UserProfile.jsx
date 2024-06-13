@@ -50,14 +50,15 @@ const mappedEvents = events.map(event =>{
 
 
     return(
-        <>
-        <h2>UserProfile Page</h2>
-        <h1>{user.username}</h1>
-        <h2>{user.bio}</h2>
-        <br></br>
+        <div className ='flex flex-col items-center'>
+            <div className='text-center my-8' >
+            <h1 className='text-3xl font-bold'>{user.username}</h1>
+            <h2 className='text-xl'>{user.bio}</h2>
+            </div>
+        <div>
         {mappedEvents}
-    
-    </>
+        </div>
+    </div>
     )
 }
 

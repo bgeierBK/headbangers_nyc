@@ -35,9 +35,11 @@ return(
 
     <div className="bg-neutral-200">
         <NavBar currentUser = {currentUser} setCurrentUser={setCurrentUser}/>
-        <div className='font-newRocker'>
+        <br></br>
+        <div className='font-newRocker text-4xl'>
         <h1>Headbangers NYC</h1>
         </div>
+        <br></br>
         <Outlet context={{currentUser:currentUser, setCurrentUser:setCurrentUser, }} />
     </div>
 )

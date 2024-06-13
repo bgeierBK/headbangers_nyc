@@ -101,7 +101,7 @@ def delete_user(id):
 
 @app.get('/api/venues')
 def get_venues():
-    return [venue.to_dict(rules={"events", "-owner_user", "reviews"}) for venue in Venue.query.all()], 200
+    return [venue.to_dict(rules={"events", "-owner_user", "reviews", "photos"}) for venue in Venue.query.all()], 200
 
 @app.get('/api/venues/<int:id>')
 def get_one_venue(id):
@@ -284,7 +284,7 @@ def add_photo():
     data = request.get_json()
     url = data.get('file')
     user_id = data.get('user_id')
-    venue_id = data.get('user_id')
+    venue_id = data.get('venue_id')
     event_id = data.get('event_id')
 
     if not url:

@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import { useOutletContext } from 'react-router-dom'
+import { useOutletContext, useNavigate } from 'react-router-dom'
 
 function SignUp(){
 const [username, setUserName] = useState('')
@@ -7,7 +7,7 @@ const [age, setAge] = useState('')
 const [password, setPassword] = useState('')
 const [email_address, setEmail] = useState('')
 const [bio, setBio] = useState('')
-
+const navigate= useNavigate()
 const{setCurrentUser}=useOutletContext()
 
 
@@ -23,6 +23,7 @@ function handleSubmit(event){
         if (response.ok){
             response.json()
             .then(newUser => setCurrentUser(newUser))
+            navigate('/')
         } else{
             alert("Problem with signup")
         }

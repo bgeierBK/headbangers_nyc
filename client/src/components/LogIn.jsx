@@ -1,11 +1,10 @@
 import {useState} from 'react'
-import { useOutletContext } from 'react-router-dom'
+import { useOutletContext, useNavigate } from 'react-router-dom'
 
 function LogIn(){
 const [username, setUserName] = useState('')
 const [password, setPassword] = useState('')
-
-
+const navigate = useNavigate()
 const{setCurrentUser}=useOutletContext()
 
 
@@ -22,6 +21,7 @@ function handleSubmit(event){
         if (response.ok){
             response.json()
             .then(user => setCurrentUser(user))
+            navigate('/')
         } else{
             alert("Invalid username or password!")
         }

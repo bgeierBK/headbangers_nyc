@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom'
 import { useOutletContext } from 'react-router-dom'
 import ReviewCard from '../components/ReviewCard'
+import Modal from '../components/Modal'
+import PhotoCard from '../components/PhotoCard'
 
 function VenuePage(){
     const {id} = useParams()
@@ -9,12 +11,17 @@ function VenuePage(){
     const [error, setError] = useState(null)
     const [venue, setVenue] = useState(null)
     const [reviewText, setReviewText] = useState('')
-    const [reviews, setReviews] = useState('')
+    const [reviews, setReviews] = useState([])
     const { currentUser, setCurrentUser } = useOutletContext();
     const [headliner, setHeadliner] = useState('')
     const [openers, setOpeners] = useState('')
     const [date, setDate] = useState('')
     const [stars, setStars] = useState(null)
+    const [file, setFile] = useState(null)
+    const [photos, setPhotos] = useState([])
+    const [message, setMessage]= useState('')
+    const [isOpen, setIsOpen] = useState(false)
+    const [selectedPhoto, setSelectedPhoto] = useState(null)
     
     
     useEffect(() =>{
@@ -27,14 +34,18 @@ function VenuePage(){
         })
         .then((data) =>{
             setVenue(data);
-            setReviews(data.reviews)
+            console.log(venue)
+            setReviews(data.reviews || [])
+            setPhotos(data.photos || [])
+            console.log(photos)
             setLoading(false);
         })
         .catch((error) =>{
             setError(error);
             setLoading(false)
         })
-    }, [id, venue])
+    }, [id])
+
 
 
 if (loading){
@@ -182,6 +193,66 @@ function handleLGBTUp(){
                     console.error('Error:', error)
                 })
                 }
+
+                const handlePhotoSubmit = async (e) =>{
+                    e.preventDefault();
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('upload_preset', 'm4excn2y');
+                    
+                    try{
+                        const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dxtkrqdmo/image/upload',{
+                        method: 'POST',
+                        body: formData
+                        });
+                        if (!cloudinaryResponse.ok){
+                            throw new Error('Failed to upload photo to Cloudinary')
+                        }
+                    const cloudinaryResult = await cloudinaryResponse.json();
+                    const photoUrl = cloudinaryResult.secure_url;
+                
+                    const backendResponse = await fetch ('/api/photos', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            file: photoUrl,
+                            venue_id: venue.id,
+                        })
+                    });
+                    if (!backendResponse.ok){
+                        throw new Error('Failed to upload photo to backend');
+                    }
+                    const result = await backendResponse.json();
+                    setMessage('Photo uploaded successfully');
+                    console.log('Photo uploaded successfully', result);
+                    setPhotos([...photos, result])
+                    } catch (error){
+                        setMessage('Error uploading photo');
+                        console.error('Error ploading photo', error)
+                    }
+                }
+                
+                
+                const openModal = (photo) => {
+                    setSelectedPhoto(photo);
+                    setIsOpen(true)
+                }
+                
+                const closeModal = () =>{
+                    setIsOpen(false);
+                    setSelectedPhoto(null)
+                }
+
+                function handleFileChange(event){
+                    setFile(event.target.files[0])
+                }
+                const mappedPhotos = photos.map(photo => (
+                    <div key={photo.id} className='relative overflow-hidden' onClick={() => openModal(photo)}>
+                        <PhotoCard photo={photo}/>
+                    </div>
+                   ))
     
     return(
        <div className='bg-neutral-200'>
@@ -201,7 +272,14 @@ function handleLGBTUp(){
                 <ReviewCard key={review.id} review={review} id={id} />
             ))}
         </div>
-        
+        <br></br>
+        <div className='space-y-2'>
+            {photos.map(photo =>(
+                <PhotoCard key={photo.id} photo={photo} id={id} />
+            ))}
+        </div>
+       
+        <br></br>
         <div className='flex flex-col space-y-4'>
         <form onSubmit={handleReviewSubmit}>
             <label>Share Your Review</label>
@@ -215,7 +293,18 @@ function handleLGBTUp(){
             <button type="submit">Submit Review</button>
         </form>
         </div>
+        
 
+        <h5>Add a photo for this venue:</h5>
+        <form onSubmit={handlePhotoSubmit}>
+            <label>Choose file:
+                <input type="file" onChange={handleFileChange} required></input>
+            </label>
+            <button type="submit">Upload Photo</button>
+        </form>
+        {isOpen && (
+            <Modal photo={selectedPhoto} closeModal={closeModal} />
+        )}
 
 
         <br></br>

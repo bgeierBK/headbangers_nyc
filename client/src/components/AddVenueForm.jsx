@@ -45,13 +45,13 @@ function handleSubmit(event){
 
 return(
 
-<div id="add">
+<div className='flex justify-end px-4'>
 
     <form id='addvalue' onSubmit={handleSubmit}>
         <div id="add head">
             <h2>Don't see your favorite venue? Add it!</h2>
         </div>
-        <div id="form">
+        <div className="flex flex-col font-bold">
             <label className='label' htmlFor="name">Venue Name</label>
             <input 
             name='name'
@@ -69,6 +69,7 @@ return(
             <label className='label' htmlFor="burough">Burough</label>
             <select 
             name='burough'
+            className='font-normal'
             placeholder='Burough'
             value={formData.burough}
             onChange={handleChange}
@@ -79,6 +80,7 @@ return(
                 <option value='The Bronx'>The Bronx</option>
                 <option value='Staten Island'>Staten Island</option>
             </select>
+            <label className='label' htmlFor="burough">Website</label>
             <input 
             name='website'
             placeholder='Website'

@@ -31,7 +31,7 @@ function NavBar({currentUser, setCurrentUser}){
         {
             currentUser == null
             ?
-            <div>
+            <div className='flex justify-end space-x-2'>
             <NavLink to='/'
             className='navlink'>
                 Home 
@@ -41,16 +41,16 @@ function NavBar({currentUser, setCurrentUser}){
                 About 
             </NavLink>
             <NavLink to='/signup'
-            className='navlink'>
+            className='navlink bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700'>
                 Signup 
             </NavLink>
             <NavLink to='/login'
-            className='navlink'>
+           className='navlink bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700'>
                 Login
             </NavLink>
             </div>
             :
-        <div id='links'>
+        <div className='flex justify-end space-x-2'>
             <NavLink to='/'
             className='navlink'>
                 Home 
@@ -63,7 +63,9 @@ function NavBar({currentUser, setCurrentUser}){
             className='navlink'>
                 About 
             </NavLink>
-            <button onClick={handleLogOut}>Log Out</button>
+            <button
+            className='navlink bg-transparent hover:bg-gray-200 text-blue-500 font-semibold py-2 px-4 border border-blue-500 rounded'
+            onClick={handleLogOut}>Log Out</button>
             </div>
 
            
