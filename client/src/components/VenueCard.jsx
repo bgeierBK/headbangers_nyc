@@ -13,7 +13,7 @@ function VenueCard({venues, setVenues, venue}){
             </Link>
         </h2>
         <h3>{venue.address}</h3>
-        <h4>{venue.website}</h4>
+        <h4><a href={venue.website} target='_blank' rel='noopener noreferrer'>{venue.website}</a></h4>
         </div>
     )
 

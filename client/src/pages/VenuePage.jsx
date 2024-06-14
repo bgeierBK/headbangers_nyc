@@ -85,6 +85,7 @@ function handleReviewSubmit(event){
     .then(newReview =>{
         setReviews(prevReviews =>[...prevReviews, newReview])
         setReviewText('');
+        setShowReviewModal(false)
     })
     .catch(error =>{
         setError(error);
@@ -284,6 +285,14 @@ function handleLGBTUp(){
     const closeEventModal = () =>{
         setShowEventModal(false)
     }
+
+    const openReviewModal = () =>{
+        setShowReviewModal(true)
+    }
+
+    const closeReviewModal = () =>{
+        setShowReviewModal(false)
+    }
     
     return(
        <div className='bg-neutral-200'>
@@ -295,7 +304,10 @@ function handleLGBTUp(){
         <br></br>
 <div className='space-y-2 ml-4'>
 
-<button>Add Review</button>
+<button
+className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+onClick={openReviewModal}
+>Add Review</button>
 <br></br>
 <button
 className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
@@ -325,8 +337,13 @@ onClick={openEventModal}
         </div>
        
         <br></br>
-        <div className='flex flex-col space-y-4'>
-        <form className='flex flex-col space-y-4' onSubmit={handleReviewSubmit}>
+
+
+        {showReviewModal &&(
+            <div className='fixed inset-0 flex items-center justify-center z-50'>
+                <div className='absolute inset-0 bg-gray-500 opacity-75'></div>
+                <div className='bg-white p-8 rounded-lg z-10'>
+                <form className='flex flex-col space-y-4' onSubmit={handleReviewSubmit}>
             <label className='block'>Share Your Review</label>
             <textarea
             className='block w-full h-40 p-2 border rounded-md'
@@ -337,9 +354,20 @@ onClick={openEventModal}
             required
             />
             <button className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600' type="submit">Submit Review</button>
+            <button 
+                type="button"
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+                onClick={closeReviewModal}
+                >Close</button>
         </form>
-        </div>
-        
+
+                </div>
+
+            </div>
+    
+        )}
+
+
 
         <h5>Add a photo for this venue:</h5>
         <form onSubmit={handlePhotoSubmit}>
@@ -388,8 +416,14 @@ onClick={openEventModal}
                 <button 
                 type="submit"
                 className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
-                onClick={closeModal}
+                onClick={closeEventModal}
                 >Create Event</button>
+                <button 
+                type="button"
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+                onClick={closeEventModal}
+                >Close</button>
+
             </form>
 
                 </div>
