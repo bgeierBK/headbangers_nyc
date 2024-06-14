@@ -6,7 +6,7 @@ function VenueCard({venues, setVenues, venue}){
 
 
     return(
-        <div className='border border-blue-300 rounded-md p-4 mb-4 max-w-lg'>
+        <div className='border-2 border-blue-500 rounded-md p-4 mb-4 max-w-lg'>
         <h2>
             <Link to={`/venue/${venue.id}`}>
             {venue.name}

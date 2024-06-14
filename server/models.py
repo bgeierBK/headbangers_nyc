@@ -72,7 +72,7 @@ class Venue(db.Model, SerializerMixin):
     photos = db.relationship('Photo', back_populates='venue', lazy='select')
     owner_user=db.relationship('User', back_populates='owned_venue', lazy='select')
 
-    serialize_rules=['-reviews.venue', '-events', 'photos', '-owner_user.owned_venue']
+    serialize_rules=['-reviews.venue', '-events', '-photos.venue', '-owner_user']
 
 class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews_table'
@@ -117,7 +117,7 @@ class Photo(db.Model, SerializerMixin):
     venue = db.relationship('Venue', back_populates="photos", lazy='select')
     event = db.relationship('Event', back_populates="photos", lazy='select')
 
-    serialize_rules = ['-user.photos', '-venue.photos', '-event.photos']
+    serialize_rules = ['-user', '-venue', '-event']
 
 
 

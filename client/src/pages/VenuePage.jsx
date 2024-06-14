@@ -22,9 +22,16 @@ function VenuePage(){
     const [message, setMessage]= useState('')
     const [isOpen, setIsOpen] = useState(false)
     const [selectedPhoto, setSelectedPhoto] = useState(null)
+    const [lgbtqUpClicked, setLgbtqUpClicked] = useState(false)
+    const [lgbtqDownClicked, setLgbtqDownClicked] = useState(false)
+    const [safetyUpClicked, setSafetyUpClicked] = useState(false)
+    const [safetyDownClicked, setSafetyDownClicked] = useState(false)
+    const [showReviewModal, setShowReviewModal] = useState(false)
+    const [showEventModal, setShowEventModal] = useState(false)
     
     
     useEffect(() =>{
+        if (loading){
         fetch(`/api/venues/${id}`)
         .then(response =>{
             if (!response.ok){
@@ -34,17 +41,19 @@ function VenuePage(){
         })
         .then((data) =>{
             setVenue(data);
-            console.log(venue)
             setReviews(data.reviews || [])
             setPhotos(data.photos || [])
-            console.log(photos)
+            console.log(data.photos)
+            console.log(data)
             setLoading(false);
         })
         .catch((error) =>{
             setError(error);
             setLoading(false)
         })
-    }, [id])
+}
+}, [id, venue, loading])
+console.log(reviews)
 
 
 
@@ -98,7 +107,9 @@ function handleEventSubmit(event){
 
         },
         body: JSON.stringify(itemData)
+        
     })
+    setShowEventModal(false)
 
     
 }
@@ -119,6 +130,8 @@ function handleLGBTUp(){
     })
     .then (updatedVenue =>{
         console.log('Update successful', updatedVenue)
+        setLoading(true)
+        setLgbtqUpClicked(true)
     })
     .catch(error => {
         console.error('Error:', error)
@@ -142,6 +155,8 @@ function handleLGBTUp(){
         })
         .then (updatedVenue =>{
             console.log('Update successful', updatedVenue)
+            setLoading(true)
+            setLgbtqDownClicked(true)
         })
         .catch(error => {
             console.error('Error:', error)
@@ -165,6 +180,8 @@ function handleLGBTUp(){
             })
             .then (updatedVenue =>{
                 console.log('Update successful', updatedVenue)
+                setLoading(true)
+                setSafetyDownClicked(true)
             })
             .catch(error => {
                 console.error('Error:', error)
@@ -188,6 +205,8 @@ function handleLGBTUp(){
                 })
                 .then (updatedVenue =>{
                     console.log('Update successful', updatedVenue)
+                    setLoading(true)
+                    setSafetyUpClicked(true)
                 })
                 .catch(error => {
                     console.error('Error:', error)
@@ -253,44 +272,71 @@ function handleLGBTUp(){
                         <PhotoCard photo={photo}/>
                     </div>
                    ))
+                
+                const mappedReviews = reviews.map(review =>(
+                    <ReviewCard key={review.id} review={review} id={id} />
+                ))
+    
+    const openEventModal = () =>{
+        setShowEventModal(true)
+    }
+
+    const closeEventModal = () =>{
+        setShowEventModal(false)
+    }
     
     return(
        <div className='bg-neutral-200'>
        <div className='bg-neutral-200'>
-        <h2>Venue Page</h2>
-        <h3>{venue.name}</h3>
+        <h3 className='text-7xl font-bungee'><a href={venue.website} target='_blank' rel='noopener noreferrer'>{venue.name}</a></h3>
+        <h4 className='text-xl'>{venue.address}</h4>
+       
         <br></br>
         <br></br>
-        <div className='ranking'>
-<button onClick={handleLGBTDown} >👎</button> LGBTQ Friendliness Score: {venue.lgbtq_score} <button onClick={handleLGBTUp}>👍</button>
+<div className='space-y-2 ml-4'>
+
+<button>Add Review</button>
 <br></br>
+<button
+className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+onClick={openEventModal}
+>Add Event</button>
 <br></br>
-<button onClick={handleSafetyDown}>👎</button> Safety Score: {venue.safety_score} <button onClick={handleSafetyUp}>👍</button>
+
+<button onClick={handleLGBTDown} disabled={lgbtqDownClicked} >👎</button> LGBTQ Friendliness Score: {venue.lgbtq_score} <button onClick={handleLGBTUp} disabled={lgbtqUpClicked}>👍</button>
+<br></br>
+
+<button onClick={handleSafetyDown} disabled={safetyDownClicked}>👎</button> Safety Score: {venue.safety_score} <button onClick={handleSafetyUp} disabled={safetyUpClicked}>👍</button>
+<br></br>
+<p><strong>Reviews:</strong></p>
+<br></br>
 </div>
-        <div className='space-y-2'>
-            {reviews.map(review =>(
-                <ReviewCard key={review.id} review={review} id={id} />
-            ))}
+
+        <div className='space-y-2 ml-4'>
+            {mappedReviews}
         </div>
         <br></br>
-        <div className='space-y-2'>
+        <div className='grid grid-cols-5 gap-4'>
             {photos.map(photo =>(
-                <PhotoCard key={photo.id} photo={photo} id={id} />
+                <div key={photo.id} className='relative overflow-hidden' onClick={() => openModal(photo)}>
+                <PhotoCard  photo={photo} id={id} />
+                </div>
             ))}
         </div>
        
         <br></br>
         <div className='flex flex-col space-y-4'>
-        <form onSubmit={handleReviewSubmit}>
-            <label>Share Your Review</label>
-            <textarea 
+        <form className='flex flex-col space-y-4' onSubmit={handleReviewSubmit}>
+            <label className='block'>Share Your Review</label>
+            <textarea
+            className='block w-full h-40 p-2 border rounded-md'
             name='review_content'
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
             placeholder = "Write a review!"
             required
             />
-            <button type="submit">Submit Review</button>
+            <button className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600' type="submit">Submit Review</button>
         </form>
         </div>
         
@@ -300,7 +346,7 @@ function handleLGBTUp(){
             <label>Choose file:
                 <input type="file" onChange={handleFileChange} required></input>
             </label>
-            <button type="submit">Upload Photo</button>
+            <button  className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600' type="submit">Upload Photo</button>
         </form>
         {isOpen && (
             <Modal photo={selectedPhoto} closeModal={closeModal} />
@@ -311,35 +357,51 @@ function handleLGBTUp(){
         <br></br>
         <br></br>
 
-        <form onSubmit={handleEventSubmit}>
-        <label className='label' htmlFor="name">Headliner</label>
-            <input 
-            name='headliner'
-            placeholder='headliner'
-            value={headliner}
-            onChange={(e) => setHeadliner(e.target.value)}
-            />
-            <label className='label' htmlFor="name">Opening Acts</label>
-            <input 
-            name='opening_acts'
-            placeholder='Opening Acts'
-            value={openers}
-            onChange={(e) => setOpeners(e.target.value)}
-            />
-            <label className='label' htmlFor="name">Date</label>
-            <input 
-            type='date'
-            name='date'
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            />
-            <button type="submit">Create Event</button>
-        </form>
+        
+        
+        {showEventModal &&(
+            <div className='fixed inset-0 flex items-center justify-center z-50'>
+                <div className='absolute inset-0 bg-gray-500 opacity-75'></div>
+                <div className='bg-white p-8 rounded-lg z-10'>
+                <form onSubmit={handleEventSubmit}>
+            <label className='label' htmlFor="name">Headliner</label>
+                <input 
+                name='headliner'
+                placeholder='headliner'
+                value={headliner}
+                onChange={(e) => setHeadliner(e.target.value)}
+                />
+                <label className='label' htmlFor="name">Opening Acts</label>
+                <input 
+                name='opening_acts'
+                placeholder='Opening Acts'
+                value={openers}
+                onChange={(e) => setOpeners(e.target.value)}
+                />
+                <label className='label' htmlFor="name">Date</label>
+                <input 
+                type='date'
+                name='date'
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                />
+                <button 
+                type="submit"
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+                onClick={closeModal}
+                >Create Event</button>
+            </form>
 
+                </div>
+
+            </div>
+    
+        )}
         <br></br>
 
         </div>
         </div>
+        
     )
 }
 

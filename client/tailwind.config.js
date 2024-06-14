@@ -7,6 +7,8 @@ module.exports = {
     extend: {
       fontFamily: {
         newRocker: ['"New Rocker"', 'cursive'],
+        specialElite: ['Special Elite', 'cursive'],
+        bungee: ['Bungee', 'cursive']
       },
     },
   },

@@ -69,7 +69,6 @@ function EventCard({event}){
     }
 }
 
-
 const openModal = (photo) => {
     setSelectedPhoto(photo);
     setIsOpen(true)
@@ -97,7 +96,7 @@ const closeModal = () =>{
         }}
         >
             
-            <div className='relative text-center'>  
+            <div className='relative text-center font-specialElite'>  
                 <h2 className='text-3xl font-bold text-black'>{event.headliner}</h2>
                 <h3 className='text-2xl text-black'>{event.opening_acts}</h3>
                 <h3 className='text-xl text-black'>{event.venue.name}</h3>

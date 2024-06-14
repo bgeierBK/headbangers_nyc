@@ -299,7 +299,7 @@ def add_photo():
     db.session.add(new_photo)
     db.session.commit()
 
-    return jsonify({'message': 'photo added!'})
+    return jsonify(new_photo.to_dict())
         
 
 
