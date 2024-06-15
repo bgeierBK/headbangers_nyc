@@ -43,11 +43,14 @@ def create_user():
     
 @app.get("/api/check_session")
 def check_session():
-    user= User.query.where(User.id == session['user_id']).first()
-    if user:
-        return user.to_dict(), 200
-    else:
-        return {}, 204
+    if 'user_id' in session:
+        user = User.query.where(User.id == session['user_id']).first()
+        if user:
+            return user.to_dict(), 200
+        else: 
+            return {'error': 'user not found'}, 404
+    else: 
+        return {'error': 'no active session'}, 204
 
 @app.post('/api/login')
 def login():

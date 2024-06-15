@@ -12,24 +12,26 @@ function UserProfile(){
     
     
     useEffect(() =>{
-        fetch(`/api/users/${id}`)
-        .then(response =>{
-            if (!response.ok){
-                throw new Error('Network response was not ok')
-            }
-            return response.json();
-        })
-        .then((data) =>{
-            setUser(data);
-            setEvents(data.events);
-            console.log(data.events)
-            setLoading(false);
-        })
-        .catch((error) =>{
-            setError(error);
-            setLoading(false)
-        })
-    }, [id])
+        if (id && loading){
+            fetch(`/api/users/${id}`)
+                .then(response =>{
+                    if (!response.ok){
+                        throw new Error('Network response was not ok')
+                    }
+                    return response.json()
+                })
+                .then((data) =>{
+                    setUser(data);
+                    setEvents(data.events || []);
+                    setLoading(false)
+                })
+                .catch((error) =>{
+                    setError(error);
+                    setLoading(false)
+                })
+        }
+    }, [id, loading])
+
 
     
 
@@ -41,6 +43,10 @@ if (loading){
 
 if (error){
     return <div>Error: {error.message}</div>
+}
+
+if (!user){
+    return <div>User Not found</div>
 }
 
 
