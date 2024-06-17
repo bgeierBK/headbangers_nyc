@@ -115,14 +115,22 @@ def get_one_venue(id):
 
 @app.patch('/api/venues/<int:id>')
 def update_venue(id):
-    venue = Venue.query.where(Venue.id == id).first()
-    if venue:
-        for key in request.json.keys():
-            setattr(venue,key,request.json[key])
-        db.session.add(venue)
+    data= request.get_json()
+    venue = Venue.query.get(id)
+    if not venue:
+        return jsonify({'error': 'Venue not found'}), 404
+    allowed_fields={'name', 'address', 'burough', 'website', 'lgbtq_score', 'safety_score', 'owner_user_id'}
+    try:
+        for key, value in data.items():
+            if key in allowed_fields:
+                setattr(venue, key, value)
+            else:
+                return jsonify({'error': f'Field "{key}" cannot be updated'}), 400
         db.session.commit()
-        return venue.to_dict()
-    return {}, 404
+        return jsonify(venue.to_dict()), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
 
 @app.delete('/api/venues/<int:id>')
 def delete_venue(id):

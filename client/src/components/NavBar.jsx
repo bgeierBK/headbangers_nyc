@@ -26,7 +26,7 @@ function NavBar({currentUser, setCurrentUser}){
     }
 
     return(
-    <nav id="navbar">
+    <nav className='bg-blue-500 text-slate-200'>
         
         {
             currentUser == null
@@ -41,11 +41,11 @@ function NavBar({currentUser, setCurrentUser}){
                 About 
             </NavLink>
             <NavLink to='/signup'
-            className='navlink bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700'>
+            className='navlink bg-slate-200 hover:bg-gray-200 text-blue-500 font-semibold py-2 px-4 border border-blue-500 rounded'>
                 Signup 
             </NavLink>
             <NavLink to='/login'
-           className='navlink bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700'>
+           className='navlink bg-slate-200 hover:bg-gray-200 text-blue-500 font-semibold py-2 px-4 border border-blue-500 rounded'>
                 Login
             </NavLink>
             </div>
@@ -64,7 +64,7 @@ function NavBar({currentUser, setCurrentUser}){
                 About 
             </NavLink>
             <button
-            className='navlink bg-transparent hover:bg-gray-200 text-blue-500 font-semibold py-2 px-4 border border-blue-500 rounded'
+           className='navlink bg-slate-200 hover:bg-gray-200 text-blue-500 font-semibold py-2 px-4 border border-blue-500 rounded'
             onClick={handleLogOut}>Log Out</button>
             </div>
 

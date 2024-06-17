@@ -28,7 +28,7 @@ useEffect(() =>{
 
 
 
-console.log(users)
+console.log(currentUser)
 
 
 return(
@@ -36,7 +36,7 @@ return(
     <div className="bg-neutral-200">
         <NavBar currentUser = {currentUser} setCurrentUser={setCurrentUser}/>
         <br></br>
-        <div className='font-newRocker text-4xl'>
+        <div className='font-newRocker text-4xl text-blue-500'>
         <h1>Headbangers NYC</h1>
         </div>
         <br></br>

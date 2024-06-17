@@ -28,8 +28,65 @@ function VenuePage(){
     const [safetyDownClicked, setSafetyDownClicked] = useState(false)
     const [showReviewModal, setShowReviewModal] = useState(false)
     const [showEventModal, setShowEventModal] = useState(false)
+    const [showClaimModal, setShowClaimModal] = useState(false)
+    const [showEditModal, setShowEditModal] = useState(false)
+    const [venueID, setVenueID] = useState(null)
+    const [venueData, setVenueData]= useState({
+        name: '',
+        address: '',
+        website: ''})
+
     
+
     
+    function handleVenueEdit(event){
+        event.preventDefault()
+        const updatedData = {}
+
+        for (let key in venueData){
+            if (venueData[key]){
+                updatedData[key] = venueData[key]
+            }
+        }
+
+        fetch(`/api/venues/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData)
+        })
+        .then(response =>{
+            if (!response.ok){
+                throw new Error('failed to update venue')
+            }
+            return response.json()
+        })
+        .then(updatedVenue =>{
+            console.log('venue successfully updated', updatedVenue)
+            closeEditModal()
+            window.location.reload();
+        })
+        .catch(error =>{
+            console.error('errir updating venue', error)
+        })
+    }
+        
+    function handleVenueChange(e){
+        const {name, value} = e.target;
+        setVenueData(prevState =>({
+            ...prevState,
+            [name]: value
+        }))
+    }
+
+    
+    function handleMultipleClicks(...functions){
+        return() =>{
+            functions.forEach(func => func())
+        }
+    }
+
     useEffect(() =>{
         if (loading){
         fetch(`/api/venues/${id}`)
@@ -43,9 +100,8 @@ function VenuePage(){
             setVenue(data);
             setReviews(data.reviews || [])
             setPhotos(data.photos || [])
-            console.log(data.photos)
-            console.log(data)
             setLoading(false);
+            setVenueID(data.owner_user_id)
         })
         .catch((error) =>{
             setError(error);
@@ -53,7 +109,7 @@ function VenuePage(){
         })
 }
 }, [id, venue, loading])
-console.log(reviews)
+
 
 
 
@@ -111,9 +167,8 @@ function handleEventSubmit(event){
         
     })
     setShowEventModal(false)
-
-    
 }
+
 function handleLGBTUp(){
     fetch(`/api/venues/${id}`,{
     method: "PATCH",
@@ -214,6 +269,35 @@ function handleLGBTUp(){
                 })
                 }
 
+            function claimVenue(){
+                if (!id || !currentUser || !currentUser.id){
+                    console.error('invalid id or user', {id, currentUser})
+                }
+                
+                
+                fetch(`/api/venues/${id}`, {
+                    method: 'PATCH',
+                    headers:{
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                        },
+                    body: JSON.stringify({owner_user_id: currentUser.id})
+                })
+                .then(response =>{
+                    if (!response.ok){
+                        throw new Error('Failed to update')
+                    }
+                    return response.json()
+                })
+                .then(updatedVenue =>{
+                    console.log('update successsful', updatedVenue)
+                    window.location.reload()
+                })
+                .catch(error =>{
+                    console.log('error', error)
+                })
+            }
+
                 const handlePhotoSubmit = async (e) =>{
                     e.preventDefault();
                     const formData = new FormData();
@@ -293,6 +377,23 @@ function handleLGBTUp(){
     const closeReviewModal = () =>{
         setShowReviewModal(false)
     }
+
+    const openClaimModal = () =>{
+        setShowClaimModal(true)
+    }
+
+    const closeClaimModal = () =>{
+        setShowClaimModal(false)
+    }
+
+    const openEditModal = () =>{
+        setShowEditModal(true)
+    }
+
+    const closeEditModal = () =>{
+        setShowEditModal(false)
+    }
+
     
     return(
        <div className='bg-neutral-200'>
@@ -304,13 +405,33 @@ function handleLGBTUp(){
         <br></br>
 <div className='space-y-2 ml-4'>
 
+
+
+<div>
+  {venueID === null ? (
+    <button
+    className='w-48 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+    onClick={openClaimModal}
+  >
+    Claim Venue
+  </button>
+    
+  ) : (
+    <button
+      className='w-48 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+      onClick={openEditModal}
+    >
+      Edit Venue
+    </button>
+  )}
+</div>
 <button
-className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+className='w-48 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
 onClick={openReviewModal}
 >Add Review</button>
 <br></br>
 <button
-className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+className='w-48 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
 onClick={openEventModal}
 >Add Event</button>
 <br></br>
@@ -367,6 +488,28 @@ onClick={openEventModal}
     
         )}
 
+{showClaimModal &&(
+            
+            <div className='fixed inset-0 flex items-center justify-center z-50'>
+                <div className='absolute inset-0 bg-gray-500 opacity-75'></div>
+                <div className='bg-white p-8 rounded-lg z-10'>
+            <p>Are you sure you want to claim ownership of {venue.name}?</p>
+            <button 
+                type="button"
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+                onClick={handleMultipleClicks(closeClaimModal, claimVenue)}
+                >Yes</button>
+                <button 
+                type="button"
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+                onClick={closeClaimModal}
+                >No</button>
+
+            </div>
+            </div>
+    
+        )}
+
 
 
         <h5>Add a photo for this venue:</h5>
@@ -416,7 +559,6 @@ onClick={openEventModal}
                 <button 
                 type="submit"
                 className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
-                onClick={closeEventModal}
                 >Create Event</button>
                 <button 
                 type="button"
@@ -431,10 +573,55 @@ onClick={openEventModal}
             </div>
     
         )}
+
+
+{showEditModal &&(
+            <div className='fixed inset-0 flex items-center justify-center z-50'>
+                <div className='absolute inset-0 bg-gray-500 opacity-75'></div>
+                <div className='bg-white p-8 rounded-lg z-10'>
+                <form onSubmit={handleVenueEdit}>
+            <label className='label' htmlFor="name">Name</label>
+                <input 
+                name='name'
+                placeholder='name'
+                value={venueData.name}
+                onChange={handleVenueChange}
+                />
+                <label className='label' htmlFor="address">Address</label>
+                <input 
+                name='address'
+                placeholder='Address'
+                value={venueData.address}
+                onChange={handleVenueChange}
+                />
+                <label className='website' htmlFor="name">Website</label>
+                <input 
+                name='website'
+                value={venueData.website}
+                onChange={handleVenueChange}
+                />
+                <button 
+                type="submit"
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+                >Save Changes</button>
+                <button 
+                type="button"
+                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+                onClick={closeEditModal}
+                >Close</button>
+            </form>
+
+                </div>
+
+            </div>
+    
+        )}
         <br></br>
 
         </div>
         </div>
+
+        
         
     )
 }
