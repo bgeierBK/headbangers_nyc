@@ -44,7 +44,7 @@ function handleSubmit(event){
 }
 
 return(
-
+<div className='bg-slate-300 pg-6 rounded-md shadow-md'>
 <div className='flex justify-end px-4'>
 
     <form id='addvalue' onSubmit={handleSubmit}>
@@ -95,6 +95,7 @@ return(
         </div>
     </form>
 
+</div>
 </div>
 )
 }

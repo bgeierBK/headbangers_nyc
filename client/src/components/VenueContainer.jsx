@@ -31,19 +31,23 @@ function VenueContainer({venues, setVenues}){
         return <VenueCard key={venue.id} venues={venues} setVenues={setVenues} venue={venue} />
     })
 return(
-    <div className='flex flex-col'>
-    <div>
+    <div className='container mx-auto p-4'>
+    <div className='bg-slate-300 p-6 rounded-md shadow-md inline-block'>
+    <div className='mb-4'>
     <label htmlFor="search">Search by name:</label>
     <input
     type ="text"
     placeholder="Search venues by name"
     value={searchTerm}
     onChange={handleSearchChange}
+    className='block text-gray-700 font-semibold mb-2'
+
     />
+    </div>
     </div>
     <br></br>
 
-    <div>
+    <div className='flex flex-col space-y-4 items-start'>
         {mappedVenues}
     </div>
     </div>

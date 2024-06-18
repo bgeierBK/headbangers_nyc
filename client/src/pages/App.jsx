@@ -2,6 +2,8 @@ import React from 'react'
 import {Outlet} from "react-router-dom"
 import {useEffect, useState} from "react"
 import NavBar from "../components/NavBar"
+import { Link } from 'react-router-dom';
+import backgroundImage from '/Users/ben/Development/code/phase-5/headbangers_nyc/client/src/images/background.jpg'
 
 function App(){
 
@@ -33,14 +35,17 @@ console.log(currentUser)
 
 return(
 
-    <div className="bg-neutral-200">
+    <div className="relative min-h-screen bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${backgroundImage})` }}>
+    <div className='absolute inset-0 bg-black opacity-50'></div>
+    <div className='relative z-10 p-4'>
         <NavBar currentUser = {currentUser} setCurrentUser={setCurrentUser}/>
         <br></br>
         <div className='font-newRocker text-4xl text-blue-500'>
-        <h1>Headbangers NYC</h1>
+        <Link to={`/`}><h1>Headbangers NYC</h1></Link>
         </div>
         <br></br>
         <Outlet context={{currentUser:currentUser, setCurrentUser:setCurrentUser, }} />
+        </div>
     </div>
 )
 
