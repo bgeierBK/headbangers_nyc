@@ -396,10 +396,12 @@ function handleLGBTUp(){
 
     
     return(
-       <div className='bg-neutral-200'>
-       <div className='bg-neutral-200'>
+       <div>
+       <div>
+        <div className='bg-blue-500 text-slate-300'>
         <h3 className='text-7xl font-bungee'><a href={venue.website} target='_blank' rel='noopener noreferrer'>{venue.name}</a></h3>
         <h4 className='text-xl'>{venue.address}</h4>
+        </div>
        
         <br></br>
         <br></br>
@@ -436,19 +438,29 @@ onClick={openEventModal}
 >Add Event</button>
 <br></br>
 
+<div className='bg-slate-300 inline-block p-4 rounded-md shadow-md'>
+    
 <button onClick={handleLGBTDown} disabled={lgbtqDownClicked} >👎</button> LGBTQ Friendliness Score: {venue.lgbtq_score} <button onClick={handleLGBTUp} disabled={lgbtqUpClicked}>👍</button>
 <br></br>
 
 <button onClick={handleSafetyDown} disabled={safetyDownClicked}>👎</button> Safety Score: {venue.safety_score} <button onClick={handleSafetyUp} disabled={safetyUpClicked}>👍</button>
+</div>
+
 <br></br>
+
 <p><strong>Reviews:</strong></p>
 <br></br>
 </div>
 
+<div className='bg-slate-300 inline-block p-4 rounded-md shadow-md'>
         <div className='space-y-2 ml-4'>
             {mappedReviews}
         </div>
+        </div>
         <br></br>
+        <br></br>
+
+        <div className='bg-blue-500 inline-block p-4 rounded-md shadow-md'>
         <div className='grid grid-cols-5 gap-4'>
             {photos.map(photo =>(
                 <div key={photo.id} className='relative overflow-hidden' onClick={() => openModal(photo)}>
@@ -456,6 +468,8 @@ onClick={openEventModal}
                 </div>
             ))}
         </div>
+        </div>
+       
        
         <br></br>
 

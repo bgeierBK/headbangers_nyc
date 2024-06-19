@@ -50,8 +50,8 @@ const mappedEvents = events.map(event =>{
 
 
     return(
-        <div className ='flex flex-col items-center'>
-            <div className='text-center my-8' >
+        <div className ='flex flex-col items-center text-blue-500'>
+            <div className='text-center my-8 bg-slate-300' >
             <h1 className='text-3xl font-bold'>{user.username}</h1>
             <h2 className='text-xl'>{user.bio}</h2>
             </div>

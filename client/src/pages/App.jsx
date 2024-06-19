@@ -36,17 +36,18 @@ console.log(currentUser)
 return(
 
     <div className="relative min-h-screen bg-cover bg-center bg-fixed" style={{ backgroundImage: `url(${backgroundImage})` }}>
-    <div className='absolute inset-0 bg-black opacity-50'></div>
-    <div className='relative z-10 p-4'>
+        <div className='absolute inset-0 bg-black opacity-50'></div>
+        <div className='fixed top-0 left-0 right-0 z-20'>
         <NavBar currentUser = {currentUser} setCurrentUser={setCurrentUser}/>
-        <br></br>
-        <div className='font-newRocker text-4xl text-blue-500'>
-        <Link to={`/`}><h1>Headbangers NYC</h1></Link>
         </div>
+        <div className='relative z-10 pt-24'>
+            <div className='font-newRocker text-4xl text-blue-500'>
+                <Link to={`/`}><h1>Headbangers NYC</h1></Link>
+            </div>
         <br></br>
         <Outlet context={{currentUser:currentUser, setCurrentUser:setCurrentUser, }} />
         </div>
-    </div>
+    </div>  
 )
 
 }
